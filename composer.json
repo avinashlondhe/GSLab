@@ -1,0 +1,12 @@
+{
+    "name": "avinash/asssignment",
+    "require": {},
+    "autoload": {
+        "classmap": [
+            "src/"
+        ]
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7"
+    }
+}
