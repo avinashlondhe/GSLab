@@ -69,6 +69,7 @@ class RobotBattery extends Base
      */
     public function charge()
     {
+        echo PHP_EOL;
         $this->printWarn('Ohh I got discharge.. Please wait till I get fully charged');
         $rechargeSecondIndicator = 0;
 
@@ -78,6 +79,7 @@ class RobotBattery extends Base
             sleep(1);
         }
 
+        echo PHP_EOL;
         $this->printInfo('Yah I got charged.. Again I am starting to clean your apartment!!!');
     }
 }

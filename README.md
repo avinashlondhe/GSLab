@@ -20,6 +20,5 @@ php index.php
 ./vendor/bin/phpunit tests
 ```
 
-./vendor/bin/phpunit tests
 ## Contributing
 This is just for test

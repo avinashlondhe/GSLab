@@ -7,7 +7,6 @@ use GSLab\Package\RobotTime as RobotTime;
 use GSLab\Package\RobotBattery as RobotBattery;
 use GSLab\Package\Area as Area;
 use GSLab\Package\FloorType as FloorType;
-
 use InvalidArgumentException;
 
 /**
@@ -177,7 +176,7 @@ class Robot extends Base
 
 
         $robotActiveTime += $secondIndicator;
-
+        echo PHP_EOL;
         $this->printInfo(sprintf('Robot active time %d seconds', $robotActiveTime));
         $this->printInfo(sprintf('Robot got charged %d times', $robotChargeCount));
         $this->printSuccess('Your apartment has been cleaned successfully.....');
