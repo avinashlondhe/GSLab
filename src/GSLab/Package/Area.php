@@ -2,6 +2,8 @@
 
 namespace GSLab\Package;
 
+use InvalidArgumentException;
+
 /**
  * Area class
  */
@@ -18,11 +20,12 @@ class Area extends Base
      * Get the value of area
      *
      * @return int
+     * @throws InvalidArgumentException
      */
     public function getArea(): int
     {
         if (null === $this->area) {
-            $this->setArea($this->readArea());
+            throw new InvalidArgumentException('Area is not available');
         }
 
         return $this->area;
@@ -36,48 +39,31 @@ class Area extends Base
      */
     public function setArea(int $area): self
     {
+        $this->validate($area);
+
         $this->area = $area;
 
         return $this;
     }
 
-    /**
-     * Read area
-     *
-     * @return int
-     */
-    public function readArea(): int
-    {
-        $apartmentArea = (int)readline(
-            sprintf('Please enter the area in square meter (Allowed from %d to %d)', self::MIN_AREA, self::MAX_AREA)
-        );
-
-        //Recursive call
-        if (false === $this->isValidArea($apartmentArea)) {
-            $apartmentArea = $this->readArea();
-        }
-
-        return $apartmentArea;
-    }
-
-    /**
+     /**
      * Validate the area
      *
-     * @param int $count
+     * @param int $area
      * @return bool
+     * @throws InvalidArgumentException
      */
-    public function isValidArea(int $count): bool
+    public function validate(int $area): bool
     {
-        if (self::MIN_AREA > $count || self::MAX_AREA < $count) {
-            $this->printError(
+        if (self::MIN_AREA > $area || self::MAX_AREA < $area) {
+
+            throw new InvalidArgumentException(
                 sprintf(
-                    'Please enter number from %d to %d',
+                    'Invalid area, Please enter number from %d to %d',
                     self::MIN_AREA,
                     self::MAX_AREA
                 )
             );
-
-            return false;
         }
 
         return true;

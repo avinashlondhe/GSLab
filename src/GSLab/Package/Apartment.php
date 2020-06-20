@@ -11,45 +11,11 @@ use InvalidArgumentException;
  */
 class Apartment extends Base
 {
-    const MIN_APARTMENT_COUNT = 1;
-
-    const MAX_APARTMENT_COUNT = 5;
-
-    /**@var int*/
-    private $count;
-
     /**@var Area*/
     private $areaService;
 
     /**@var FloorType*/
     private $floorTypeService;
-
-    /**
-     * Get the value of count
-     *
-     * @return int
-     */
-    public function getCount(): int
-    {
-        if (null === $this->count) {
-            $this->setCount($this->readCount());
-        }
-
-        return $this->count;
-    }
-
-    /**
-     * Set the value of count
-     *
-     * @param int $count
-     * @return self
-     */
-    public function setCount(int $count): self
-    {
-        $this->count = $count;
-
-        return $this;
-    }
 
     /**
      * Get the value of areaService
@@ -108,59 +74,13 @@ class Apartment extends Base
     }
 
     /**
-     * Read the count
+     * Is apartment cleaned
      *
-     * @return int $apartmentCount
-     */
-    private function readCount(): int
-    {
-        $apartmentCount = (int) readline(
-            sprintf(
-                'How many apartments you would like clean? (Please enter only %d to %d)',
-                self::MIN_APARTMENT_COUNT,
-                self::MAX_APARTMENT_COUNT
-            )
-        );
-
-        //Recursive call
-        if (false === $this->isValidCount($apartmentCount)) {
-            $apartmentCount = $this->readCount();
-        }
-
-        return $apartmentCount;
-    }
-
-    /**
-     * Validate the count
-     *
-     * @param int $count
+     * @param int $maxAreaToClean
      * @return bool
      */
-    private function isValidCount(int $count): bool
+    public function isApartmentCleaned(int $maxAreaToClean): bool
     {
-        if (self::MIN_APARTMENT_COUNT > $count || self::MAX_APARTMENT_COUNT < $count) {
-            $this->printError(
-                sprintf(
-                    'Please enter digit from %d to %d',
-                    self::MIN_APARTMENT_COUNT,
-                    self::MAX_APARTMENT_COUNT
-                )
-            );
-
-            return false;
-        }
-
-        return true;
-    }
-
-    /**
-     * Read properties
-     *
-     * @return void
-     */
-    public function readProperties()
-    {
-        $this->getAreaService()->getArea();
-        $this->getFloorTypeService()->getType();
+        return (0 >= $maxAreaToClean);
     }
 }

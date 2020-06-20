@@ -5,27 +5,54 @@ use GSLab\Package\Area;
 
 final class AreaTest extends TestCase
 {
+    /**
+     * Test invalid min limit
+     *
+     * @return void
+     */
     public function testInvalidMinLimit()
     {
-        $area = $this->createMock(Area::class);
-        $area->method('printError');
+        $this->expectException(InvalidArgumentException::class);
+        $area = new Area();
 
-        $this->assertFalse($area->isValidArea(4));
+        $area->validate(4);
     }
 
+    /**
+     * Test invalid max limit
+     *
+     * @return void
+     */
     public function testInvalidMaxLimit()
     {
-        $area = $this->createMock(Area::class);
-        $area->method('printError');
+        $this->expectException(InvalidArgumentException::class);
+        $area = new Area();
 
-        $this->assertFalse($area->isValidArea(501));
+        $area->validate(501);
     }
 
+    /**
+     * Valid area limit
+     *
+     * @return void
+     */
     public function testValidLimit()
     {
-        $area = $this->createMock(Area::class);
-        $area->method('printError');
+        $area = new Area();
 
-        $this->assertFalse($area->isValidArea(45));
+        $this->assertTrue($area->validate(45));
+    }
+
+    /**
+     * Test get method when area is null by default
+     *
+     * @return void
+     */
+    public function testInvalidGetArea()
+    {
+        $this->expectException(InvalidArgumentException::class);
+        $area = new Area();
+
+        $area->getArea();
     }
 }
