@@ -5,51 +5,54 @@ use GSLab\Package\Area;
 
 final class AreaTest extends TestCase
 {
+    /**
+     * Test invalid min limit
+     *
+     * @return void
+     */
     public function testInvalidMinLimit()
     {
+        $this->expectException(InvalidArgumentException::class);
         $area = new Area();
 
-        $this->assertFalse($area->isValidArea(4));
+        $area->validate(4);
     }
 
+    /**
+     * Test invalid max limit
+     *
+     * @return void
+     */
     public function testInvalidMaxLimit()
     {
+        $this->expectException(InvalidArgumentException::class);
         $area = new Area();
 
-        $this->assertFalse($area->isValidArea(501));
+        $area->validate(501);
     }
 
     /**
      * Valid area limit
+     *
+     * @return void
      */
     public function testValidLimit()
     {
         $area = new Area();
 
-        $this->assertTrue($area->isValidArea(45));
+        $this->assertTrue($area->validate(45));
     }
 
     /**
-     * Recursive test
+     * Test get method when area is null by default
      *
      * @return void
      */
-    public function testRecursiveCall()
+    public function testInvalidGetArea()
     {
-        $area = $this->createMock(Area::class);
+        $this->expectException(InvalidArgumentException::class);
+        $area = new Area();
 
-        $area->method('isValidArea')
-            ->with(3)
-            ->willReturn(false);
-
-        $area->method('readArea')
-            ->willReturn(5);
-
-        $area->method('isValidArea')
-            ->with(5)
-            ->willReturn(true);
-
-
-        $this->assertEquals(5, $area->readArea());
+        $area->getArea();
     }
 }

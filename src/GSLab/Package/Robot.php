@@ -5,8 +5,6 @@ namespace GSLab\Package;
 use GSLab\Package\Apartment as Apartment;
 use GSLab\Package\RobotTime as RobotTime;
 use GSLab\Package\RobotBattery as RobotBattery;
-use GSLab\Package\Area as Area;
-use GSLab\Package\FloorType as FloorType;
 use InvalidArgumentException;
 
 /**
@@ -115,17 +113,26 @@ class Robot extends Base
      */
     public function process()
     {
-        $floorType =  $this->getApartmentService()->getFloorTypeService()->getType();
-        //Set max operation time
-        $this->getRobotBatteryService()->setMaxOperationTime(
-            $this->getRobotTimeService()->getMaxOperationTime($floorType)
-        );
-
-        $time = $this->getRobotTimeService()->getTimeRequireToCleanOneSqMeter($floorType);
+        $floorType = $this->getFloorType();
+        $timeToCLeanOneSquareMeter = $this->getTimeRequireToCleanOneSqMeter($floorType);
 
         //Max needs to be clean
-        $maxAreaToClean = $this->getApartmentService()->getAreaService()->getArea();
+        $maxAreaToClean = $this->getAreaRequiredToClean();
 
+        [$robotActiveTime, $robotChargeCount] = $this->clean($maxAreaToClean, $timeToCLeanOneSquareMeter);
+
+        $this->printSuccessMessage($robotActiveTime, $robotChargeCount);
+    }
+
+    /**
+     * Cleaning process
+     *
+     * @param int $maxAreaToClean
+     * @param int $timeToCLeanOneSquareMeter
+     * @return array
+     */
+    public function clean(int $maxAreaToClean, int $timeToCLeanOneSquareMeter): array
+    {
         $secondIndicator = 0;
         $robotChargeCount = 0;
         $robotActiveTime = 0;
@@ -134,15 +141,15 @@ class Robot extends Base
 
         while ($maxAreaToClean > 0) {
             $maxAreaToClean--;
-            $secondIndicator += $time;
-            sleep($time);
-            echo '.';
+            $secondIndicator += $timeToCLeanOneSquareMeter;
 
-            if ($this->getApartmentService()->isApartmentCleaned($maxAreaToClean)) {
+            $this->printAndSleep($timeToCLeanOneSquareMeter);
+
+            if ($this->isApartmentCleaned($maxAreaToClean)) {
                 break;
             }
 
-            if ($this->getRobotBatteryService()->isDischarged($secondIndicator)) {
+            if ($this->isRobotDischarged($secondIndicator)) {
                 $robotActiveTime += $secondIndicator;
 
                 //Reset second timer
@@ -151,11 +158,88 @@ class Robot extends Base
             }
         }
 
-
         $robotActiveTime += $secondIndicator;
+
+        return [$robotActiveTime, $robotChargeCount];
+    }
+
+    /**
+     * Sleep and print
+     *
+     * @param int $timeToCLeanOneSquareMeter
+     * @return void
+     */
+    public function printAndSleep(int $timeToCLeanOneSquareMeter): void
+    {
+        echo '.';
+        sleep($timeToCLeanOneSquareMeter);
+    }
+
+    /**
+     * Check is robot discharged
+     *
+     * @param int $secondIndicator
+     * @return bool
+     */
+    public function isRobotDischarged(int $secondIndicator): bool
+    {
+        return $this->getRobotBatteryService()->isDischarged($secondIndicator);
+    }
+
+    /**
+     * Check apartment is cleaned
+     *
+     * @param int $maxAreaToClean
+     * @return bool
+     */
+    public function isApartmentCleaned(int $maxAreaToClean): bool
+    {
+        return $this->getApartmentService()->isApartmentCleaned($maxAreaToClean);
+    }
+
+    /**
+     * Print Success message
+     *
+     * @param integer $robotActiveTime
+     * @param integer $robotChargeCount
+     * @return void
+     */
+    public function printSuccessMessage(int $robotActiveTime, int $robotChargeCount): void
+    {
         echo PHP_EOL;
         $this->printInfo(sprintf('Robot active time %d seconds', $robotActiveTime));
         $this->printInfo(sprintf('Robot got charged %d times', $robotChargeCount));
         $this->printSuccess('Your apartment has been cleaned successfully.....');
+    }
+
+    /**
+     * Get floor type
+     *
+     * @return string
+     */
+    private function getFloorType(): string
+    {
+        return $this->getApartmentService()->getFloorTypeService()->getType();
+    }
+
+    /**
+     * Get time required to clean one square meter
+     *
+     * @param string $floorType
+     * @return int
+     */
+    public function getTimeRequireToCleanOneSqMeter(string $floorType): int
+    {
+        return $this->getRobotTimeService()->getTimeRequireToCleanOneSqMeter($floorType);
+    }
+
+    /**
+     * Get area required to clean
+     *
+     * @return int
+     */
+    public function getAreaRequiredToClean(): int
+    {
+        return $this->getApartmentService()->getAreaService()->getArea();
     }
 }

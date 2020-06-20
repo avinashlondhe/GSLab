@@ -24,9 +24,8 @@ try {
         throw new InvalidArgumentException('Area not found');
     }
 
-    $arguments['floor'] = ($arguments['floor'] ?: $arguments['f']);
-    $arguments['area'] = ($arguments['area'] ?: $arguments['a']);
-
+    $arguments['floor'] = (isset($arguments['floor']) ? $arguments['floor'] : $arguments['f']);
+    $arguments['area'] = (isset($arguments['area']) ? $arguments['area'] : $arguments['a']);
 
     $floorTypeService = new GSLab\Package\FloorType();
     $floorTypeService->setType($arguments['floor']);
@@ -38,8 +37,8 @@ try {
     $apartmentService->setAreaService($areaService)
         ->setFloorTypeService($floorTypeService);
 
-    $inputClass = new GSLab\Package\Robot();
-    $inputClass->setApartmentService($apartmentService)
+    $robotClass = new GSLab\Package\Robot();
+    $robotClass->setApartmentService($apartmentService)
         ->setRobotTimeService(new GSLab\Package\RobotTime())
         ->setRobotBatteryService(new GSLab\Package\RobotBattery())
         ->process();

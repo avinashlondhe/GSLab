@@ -13,7 +13,9 @@ composer update
 ## Run
 
 ```php
-php index.php
+php index.php --floor=hard --area=70
+php index.php --floor=carpet --area=60
+php index.php  -f=carpet -a=60
 ```
 ## Run PHPUnit
 ```bash
