@@ -108,12 +108,6 @@ class Robot extends Base
         return $this;
     }
 
-    public function restServices()
-    {
-        $this->getApartmentService()->setAreaService(new Area())
-            ->setFloorTypeService(new FloorType());
-    }
-
     /**
      * Process the request
      *
@@ -121,39 +115,22 @@ class Robot extends Base
      */
     public function process()
     {
-        $apartmentCount = $this->getApartmentService()->getCount();
-
-        while($apartmentCount > 0) {
-            $apartmentCount--;
-            $this->getApartmentService()->readProperties();
-            $this->processRobot();
-            $this->restServices();
-        }
-    }
-
-    /**
-     * Process robot
-     *
-     * @return void
-     */
-    public function processRobot()
-    {
         $floorType =  $this->getApartmentService()->getFloorTypeService()->getType();
         //Set max operation time
         $this->getRobotBatteryService()->setMaxOperationTime(
             $this->getRobotTimeService()->getMaxOperationTime($floorType)
         );
 
-        $time = $this->getRobotTimeService()->getTimeRequireToCleanPerSqMeter($floorType);
+        $time = $this->getRobotTimeService()->getTimeRequireToCleanOneSqMeter($floorType);
 
         //Max needs to be clean
         $maxAreaToClean = $this->getApartmentService()->getAreaService()->getArea();
 
-        $this->printInfo('Hello, I am starting to clean your apartment!!');
-
         $secondIndicator = 0;
         $robotChargeCount = 0;
         $robotActiveTime = 0;
+
+        $this->printInfo('Hello, I am starting to clean your apartment!!');
 
         while ($maxAreaToClean > 0) {
             $maxAreaToClean--;
@@ -161,7 +138,7 @@ class Robot extends Base
             sleep($time);
             echo '.';
 
-            if ($this->isApartmentCleaned($maxAreaToClean)) {
+            if ($this->getApartmentService()->isApartmentCleaned($maxAreaToClean)) {
                 break;
             }
 
@@ -180,16 +157,5 @@ class Robot extends Base
         $this->printInfo(sprintf('Robot active time %d seconds', $robotActiveTime));
         $this->printInfo(sprintf('Robot got charged %d times', $robotChargeCount));
         $this->printSuccess('Your apartment has been cleaned successfully.....');
-    }
-
-    /**
-     * Is apartment cleaned
-     *
-     * @param int $maxAreaToClean
-     * @return bool
-     */
-    public function isApartmentCleaned(int $maxAreaToClean): bool
-    {
-        return (0 >= $maxAreaToClean);
     }
 }

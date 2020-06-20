@@ -14,8 +14,8 @@ class RobotTime extends Base
     public const FULL_TIME_RECHARGE = 30;
 
     public const TIME_TO_CLEAN = [
-        'H' => 1,
-        'C' => 2,
+        'hard' => 1,
+        'carpet' => 2,
     ];
 
     /**
@@ -27,7 +27,7 @@ class RobotTime extends Base
     public function getMaxOperationTime(string $floorType): int
     {
         if (!isset(self::TIME_TO_CLEAN[$floorType])) {
-            throw new InvalidArgumentException('Invalid floor type found');
+            throw new InvalidArgumentException('Time setting is missing for floor type');
         }
 
         return (int)intdiv(
@@ -36,10 +36,16 @@ class RobotTime extends Base
         );
     }
 
-    public function getTimeRequireToCleanPerSqMeter(string $floorType): int
+    /**
+     * Get time require to clean one square meter
+     *
+     * @param string $floorType
+     * @return integer
+     */
+    public function getTimeRequireToCleanOneSqMeter(string $floorType): int
     {
         if (!isset(self::TIME_TO_CLEAN[$floorType])) {
-            throw new InvalidArgumentException('Invalid floor type found');
+            throw new InvalidArgumentException('Time setting is missing for floor type');
         }
 
         return (int)self::TIME_TO_CLEAN[$floorType];

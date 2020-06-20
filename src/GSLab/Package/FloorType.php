@@ -2,14 +2,16 @@
 
 namespace GSLab\Package;
 
+use InvalidArgumentException;
+
 /**
  * FloorType class
  */
 class FloorType extends Base
 {
-    public const TYPE_HARD = 'H';
+    public const TYPE_HARD = 'hard';
 
-    public const TYPE_CARPET = 'C';
+    public const TYPE_CARPET = 'carpet';
 
     /**@var String */
     private $type;
@@ -18,11 +20,12 @@ class FloorType extends Base
      * Get the value of type
      *
      * @return string
+     * @throws InvalidArgumentException
      */
     public function getType(): string
     {
         if (null === $this->type) {
-            $this->setType($this->readType());
+            throw new InvalidArgumentException('Floor type is not available');
         }
 
         return $this->type;
@@ -36,32 +39,10 @@ class FloorType extends Base
      */
     public function setType(string $type): self
     {
+        $this->validate($type);
         $this->type = $type;
 
         return $this;
-    }
-
-     /**
-     * Read type
-     *
-     * @return string
-     */
-    public function readType(): string
-    {
-        $floorType = (string)readline(
-            sprintf(
-                'Please enter floor type [%s-Hard, %s-Carpet]',
-                self::TYPE_HARD,
-                self::TYPE_CARPET
-            )
-        );
-
-        //Recursive call
-        if (false === $this->isValidType($floorType)) {
-            $floorType = $this->readType();
-        }
-
-        return $floorType;
     }
 
     /**
@@ -70,7 +51,7 @@ class FloorType extends Base
      * @param string $floorType
      * @return bool
      */
-    public function isValidType(string $floorType): bool
+    public function validate(string $floorType): bool
     {
         switch ($floorType) {
             case self::TYPE_HARD:
@@ -78,14 +59,13 @@ class FloorType extends Base
                 return true;
 
             default:
-                $this->printError(
+                throw new InvalidArgumentException(
                     sprintf(
-                        'Please enter CHAR %s or %s',
+                        'Please enter [%s or %s]',
                         self::TYPE_HARD,
                         self::TYPE_CARPET
                     )
                 );
-                return false;
         }
     }
 }
