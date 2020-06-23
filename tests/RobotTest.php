@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
-use GSLab\Package\RobotBattery;
+use GSLab\RoboticCleaner\RobotBattery;
 use PHPUnit\Framework\MockObject\MockBuilder;
 
 /**
@@ -56,7 +56,7 @@ final class RobotTest extends TestCase
      */
     private function initRobotService(int $area)
     {
-        $robotServiceMock = $this->getMockBuilder('GSLab\Package\Robot')
+        $robotServiceMock = $this->getMockBuilder('GSLab\RoboticCleaner\Robot')
             ->setMethods([
                 'isApartmentCleaned',
                 'isRobotDischarged',

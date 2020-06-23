@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
-use GSLab\Package\RobotTime;
+use GSLab\RoboticCleaner\RobotTime;
 
 final class RobotTimeTest extends TestCase
 {

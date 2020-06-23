@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
-use GSLab\Package\Area;
+use GSLab\RoboticCleaner\Area;
 
 final class AreaTest extends TestCase
 {

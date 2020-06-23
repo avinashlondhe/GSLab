@@ -1,6 +1,6 @@
 <?php
 
-namespace GSLab\Package;
+namespace GSLab\RoboticCleaner;
 
 use InvalidArgumentException;
 

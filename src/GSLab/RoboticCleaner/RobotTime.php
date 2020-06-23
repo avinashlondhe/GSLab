@@ -1,8 +1,8 @@
 <?php
 
-namespace GSLab\Package;
+namespace GSLab\RoboticCleaner;
 
-use GSLab\Package\RobotBattery;
+use GSLab\RoboticCleaner\RobotBattery;
 use InvalidArgumentException;
 
 /**

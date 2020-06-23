@@ -27,20 +27,20 @@ try {
     $arguments['floor'] = (isset($arguments['floor']) ? $arguments['floor'] : $arguments['f']);
     $arguments['area'] = (isset($arguments['area']) ? $arguments['area'] : $arguments['a']);
 
-    $floorTypeService = new GSLab\Package\FloorType();
+    $floorTypeService = new GSLab\RoboticCleaner\FloorType();
     $floorTypeService->setType($arguments['floor']);
 
-    $areaService = new GSLab\Package\Area();
+    $areaService = new GSLab\RoboticCleaner\Area();
     $areaService->setArea($arguments['area']);
 
-    $apartmentService = new GSLab\Package\Apartment();
+    $apartmentService = new GSLab\RoboticCleaner\Apartment();
     $apartmentService->setAreaService($areaService)
         ->setFloorTypeService($floorTypeService);
 
-    $robotClass = new GSLab\Package\Robot();
+    $robotClass = new GSLab\RoboticCleaner\Robot();
     $robotClass->setApartmentService($apartmentService)
-        ->setRobotTimeService(new GSLab\Package\RobotTime())
-        ->setRobotBatteryService(new GSLab\Package\RobotBattery())
+        ->setRobotTimeService(new GSLab\RoboticCleaner\RobotTime())
+        ->setRobotBatteryService(new GSLab\RoboticCleaner\RobotBattery())
         ->process();
 
 } catch (Exception $ex) {

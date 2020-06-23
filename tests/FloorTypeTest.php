@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 use PHPUnit\Framework\TestCase;
-use GSLab\Package\FloorType;
+use GSLab\RoboticCleaner\FloorType;
 
 /**
  * FloorTypeTest class

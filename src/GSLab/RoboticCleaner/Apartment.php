@@ -1,9 +1,9 @@
 <?php
 
-namespace GSLab\Package;
+namespace GSLab\RoboticCleaner;
 
-use GSLab\Package\Area as Area;
-use GSLab\Package\FloorType as FloorType;
+use GSLab\RoboticCleaner\Area as Area;
+use GSLab\RoboticCleaner\FloorType as FloorType;
 use InvalidArgumentException;
 
 /**

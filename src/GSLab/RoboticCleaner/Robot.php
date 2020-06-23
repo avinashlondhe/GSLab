@@ -1,10 +1,10 @@
 <?php
 
-namespace GSLab\Package;
+namespace GSLab\RoboticCleaner;
 
-use GSLab\Package\Apartment as Apartment;
-use GSLab\Package\RobotTime as RobotTime;
-use GSLab\Package\RobotBattery as RobotBattery;
+use GSLab\RoboticCleaner\Apartment as Apartment;
+use GSLab\RoboticCleaner\RobotTime as RobotTime;
+use GSLab\RoboticCleaner\RobotBattery as RobotBattery;
 use InvalidArgumentException;
 
 /**
@@ -139,11 +139,13 @@ class Robot extends Base
 
         $this->printInfo('Hello, I am starting to clean your apartment!!');
 
-        while ($maxAreaToClean > 0) {
+        $areaCleaned = 0;
+        while (0 <= $maxAreaToClean) {
+            $areaCleaned++;
             $maxAreaToClean--;
             $secondIndicator += $timeToCLeanOneSquareMeter;
 
-            $this->printAndSleep($timeToCLeanOneSquareMeter);
+            $this->printAndSleep($timeToCLeanOneSquareMeter, $areaCleaned, $secondIndicator);
 
             if ($this->isApartmentCleaned($maxAreaToClean)) {
                 break;
@@ -169,9 +171,13 @@ class Robot extends Base
      * @param int $timeToCLeanOneSquareMeter
      * @return void
      */
-    public function printAndSleep(int $timeToCLeanOneSquareMeter): void
+    public function printAndSleep(int $timeToCLeanOneSquareMeter, $areaCleaned, $secondIndicator): void
     {
-        echo '.';
+        echo sprintf(
+            "\033[32m [Battery Level %0.2f%%] -- Area cleaned [%s] square meter \r \033[0m",
+            $this->getRobotBatteryService()->getRobotBatteryLevel($secondIndicator, true),
+            $areaCleaned
+        );
         sleep($timeToCLeanOneSquareMeter);
     }
 
@@ -208,7 +214,7 @@ class Robot extends Base
     {
         echo PHP_EOL;
         $this->printInfo(sprintf('Robot active time %d seconds', $robotActiveTime));
-        $this->printInfo(sprintf('Robot got charged %d times', $robotChargeCount));
+        $this->printInfo(sprintf('Robot got charged %d time(s)', $robotChargeCount));
         $this->printSuccess('Your apartment has been cleaned successfully.....');
     }
 

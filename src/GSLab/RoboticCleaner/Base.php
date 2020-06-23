@@ -1,5 +1,5 @@
 <?php
-namespace GSLab\Package;
+namespace GSLab\RoboticCleaner;
 
 abstract class Base
 {
